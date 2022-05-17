@@ -1,0 +1,46 @@
+[tool.isort]
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true
+line_length = 88
+
+[tool.pylint.messages_control]
+disable = [
+    "missing-module-docstring",
+    "missing-class-docstring",
+    "missing-function-docstring",
+]
+[tool.pylint.format]
+max-line-length = 88
+
+[tool.black]
+line-length = 88
+
+[tool.commitizen]
+name = "cz_conventional_commits"
+version = "0.0.1"
+version_files = ["setup.cfg:version"]
+tag_format = "$version"
+bump_message = "bump: $current_version → $new_version"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+required_plugins = ["requests-mock==1.9.3"]
+
+[tool.coverage.run]
+branch = true
+source = ["src/"]
+[tool.coverage.report]
+show_missing = true
+skip_covered = false
+fail_under = 70
+
+
+[tool.bandit]
+exclude_dirs = ["tests/"]
+
+[tool.mypy]
+ignore_missing_imports = true
+files = "src"

@@ -1,0 +1,130 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  AWS Serverless Application to get top 10 movies
+
+Globals:
+  Function:
+    Architectures:
+      - x86_64
+    Runtime: python3.8
+    Timeout: 120
+    CodeUri: ./src/
+
+Parameters:
+  BucketName:
+    Type: String
+    Default: bucket-with-top-ten-movies
+    Description: Enter a bucket name.
+  SqsQueueName:
+    Type: String
+    Default: MovieQueue
+    Description: Enter a SQS queue name.
+  TopMoviesUrl:
+    Type: String
+    Default: https://top-movies.s3.eu-central-1.amazonaws.com/Top250Movies.json
+    Description: Enter an URL with a movies data.
+  OmdbApiUrl:
+    Type: String
+    Default: https://www.omdbapi.com
+    Description: Enter OMDB API URL.
+  OmdbApiSecretName:
+    Type: String
+    Default: OmdbApiKey
+    Description: Enter a secret name for OMDB API key
+  OmdbApiSecretKey:
+    NoEcho: true
+    Type: String
+    Description: Enter a secret key for OMDB.
+  LambdaLogLevel:
+    Type: String
+    AllowedValues:
+      - INFO
+      - DEBUG
+    Default: INFO
+    Description: Enter a log level value for Python lambdas.
+
+Resources:
+  OmdbApiKey:
+    Type: 'AWS::SecretsManager::Secret'
+    Properties:
+      Description: OMDB API key.
+      Name:
+        Ref: OmdbApiSecretName
+      SecretString:
+        Ref: OmdbApiSecretKey
+  MovieQueue:
+    Type: 'AWS::SQS::Queue'
+    Properties:
+      VisibilityTimeout: 150
+      QueueName:
+        Ref: SqsQueueName
+  GrabTopTenMovies:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: cat_in_the_movies.get_top_ten_movies.event_handler
+      Description: Get top ten movies
+      FunctionName: get_top_ten_movies
+      Environment:
+        Variables:
+          SQS_QUEUE_URL:
+            Ref: MovieQueue
+          TOP_MOVIES_URL:
+            Ref: TopMoviesUrl
+          LOG_LEVEL:
+            Ref: LambdaLogLevel
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - 'sqs:GetQueueUrl'
+                - 'sqs:SendMessage'
+              Resource: '*'
+      Events:
+        RateSchedule:
+          Properties:
+            Description: Schedule to run once every day
+            Enabled: true
+            Name: run-daily
+            Schedule: rate(1 day)
+          Type: Schedule
+  EnrichTopTenMovies:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: cat_in_the_movies.enrich_top_ten_movies.event_handler
+      Description: Enrich top ten movies
+      FunctionName: enrich_top_ten_movies
+      Environment:
+        Variables:
+          BUCKET_NAME:
+            Ref: BucketName
+          OMDB_SECRET_NAME:
+            Ref: OmdbApiSecretName
+          OMDB_API_URL:
+            Ref: OmdbApiUrl
+          LOG_LEVEL:
+            Ref: LambdaLogLevel
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - 'sqs:ReceiveMessage'
+                - 'sqs:DeleteMessage'
+                - 'sqs:GetQueueAttributes'
+                - 's3:PutObject'
+                - 'secretsmanager:GetSecretValue'
+              Resource: '*'
+  EnrichTopTenMoviesEventSourceMapping:
+    Type: AWS::Lambda::EventSourceMapping
+    Properties:
+      BatchSize: 10
+      Enabled: true
+      EventSourceArn: !GetAtt MovieQueue.Arn
+      FunctionName: !GetAtt EnrichTopTenMovies.Arn
+  S3Bucket:
+    Type: 'AWS::S3::Bucket'
+    DeletionPolicy: Retain
+    Properties:
+      BucketName:
+        Ref: BucketName

@@ -1,0 +1,10 @@
+version = 0.1
+[the_cat_assignment]
+[the_cat_assignment.deploy]
+[the_cat_assignment.deploy.parameters]
+stack_name = "the-cat-assignment"
+region = "us-east-1"
+s3_bucket = "the-cat-assignment-us-east-1-sam-bucket"
+s3_prefix = "sam_deploy"
+confirm_changeset = false
+capabilities = "CAPABILITY_IAM CAPABILITY_NAMED_IAM"
