@@ -1,0 +1,16 @@
+# Don't track content of these folders
+*.egg-info/
+__pycache__/
+.aws-sam/
+.pytest_cache/
+.mypy_cache/
+.venv/
+.vscode/
+build/
+dist/
+
+# Don't track this files
+*.pyc
+lib64
+pip-selfcheck.json
+.coverag*
