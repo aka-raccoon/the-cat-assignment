@@ -1,6 +1,6 @@
 import os
 
-from .exceptions import RequiredEnvironmentVariableMissing
+from cat_in_the_movies.exceptions import RequiredEnvironmentVariableMissing
 
 
 def get_env_var(name: str) -> str:
