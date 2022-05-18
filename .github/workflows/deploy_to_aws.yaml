@@ -2,8 +2,8 @@
 name: Deploy to AWS
 
 on:
-  push:
-    tags:
+  release:
+    types: [created]
 
 jobs:
   deploy_to_aws:
