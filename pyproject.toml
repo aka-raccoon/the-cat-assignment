@@ -31,7 +31,7 @@ required_plugins = ["requests-mock==1.9.3"]
 
 [tool.coverage.run]
 branch = true
-source = ["src/"]
+source = ["cat_in_the_movies"]
 [tool.coverage.report]
 show_missing = true
 skip_covered = false
