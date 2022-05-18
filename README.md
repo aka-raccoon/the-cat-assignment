@@ -3,6 +3,9 @@
 
 # The Cat Assignment 😼
 
+[![Static Code Analysis](https://github.com/aka-raccoon/the-cat-assignment/actions/workflows/static_analysis.yaml/badge.svg)](https://github.com/aka-raccoon/the-cat-assignment/actions/workflows/static_analysis.yaml)
+[![Unit Tests](https://github.com/aka-raccoon/the-cat-assignment/actions/workflows/unit_tests.yaml/badge.svg)](https://github.com/aka-raccoon/the-cat-assignment/actions/workflows/unit_tests.yaml)
+
 The AWS journey to become a member of cats.
 
 </div>
