@@ -7,11 +7,9 @@ from cat_in_the_movies.enrich_top_ten_movies import (
     enrich_movie_with_data_from_omdb,
     get_movies_from_records,
     get_omdb_api_key,
+    get_the_movie_details_from_omdbapi,
     process_movies,
     save_to_bucket,
-)
-from src.cat_in_the_movies.enrich_top_ten_movies import (
-    get_the_movie_details_from_omdbapi,
 )
 
 
