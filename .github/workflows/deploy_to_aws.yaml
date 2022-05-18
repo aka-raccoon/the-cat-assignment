@@ -21,4 +21,4 @@ jobs:
       - run: sam build --use-container
       - run: |
           sam deploy --config-env the_cat_assignment --parameter-overrides \
-          OmdbApiSecretKey,${{ secrets.OMDB_API_SECRET_KEY }}
+          OmdbApiSecretKey=${{ secrets.OMDB_API_SECRET_KEY }}
