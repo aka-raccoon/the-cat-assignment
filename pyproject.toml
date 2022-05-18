@@ -20,7 +20,7 @@ line-length = 88
 
 [tool.commitizen]
 name = "cz_conventional_commits"
-version = "0.1.0"
+version = "0.2.0"
 version_files = ["setup.cfg:version"]
 tag_format = "$version"
 bump_message = "bump: $current_version → $new_version"
