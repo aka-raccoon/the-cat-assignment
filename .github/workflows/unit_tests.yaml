@@ -23,3 +23,5 @@ jobs:
                   pip install .[test]
             - name: Unit testing with Pytest
               run: pytest --cov
+              env:
+                  AWS_DEFAULT_REGION: us-east-1

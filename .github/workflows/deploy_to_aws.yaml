@@ -19,6 +19,6 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
       - run: sam build --use-container
-      - run:
-          sam deploy --config-env the_cat_assignment --parameter-overrides
-          OmdbApiSecretKey,${{ secrets.OMDB_API_SECRET_KEY }}"
+      - run: |
+          sam deploy --config-env the_cat_assignment --parameter-overrides \
+          OmdbApiSecretKey,${{ secrets.OMDB_API_SECRET_KEY }}
